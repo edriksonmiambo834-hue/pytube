@@ -1,0 +1,31 @@
+from moviepy.editor import VideoFileClip, AudioFileClip
+
+# === Caminhos dos arquivos (troque para o local dos seus arquivos) ===
+music_path = "7ecfb112bd3a8b63d999196d4299740e.mp4"   # música
+video_path = "lv_0_20250927071240.mp4"               # vídeo
+output_path = "collab_edit_20s.mp4"                  # saída final
+
+# Carregar arquivos
+music = AudioFileClip(music_path)
+video = VideoFileClip(video_path)
+
+# Cortar os primeiros 20 segundos do vídeo
+video_20s = video.subclip(0, min(20, video.duration))
+
+# Ajustar duração da música para 20 segundos
+music_20s = music.subclip(0, min(20, music.duration))
+
+# Substituir áudio original pela música
+final = video_20s.set_audio(music_20s)
+
+# Reduzir resolução para 720p
+final_resized = final.resize(height=720)
+
+# Exportar resultado
+final_resized.write_videofile(
+    output_path,
+    codec="libx264",
+    audio_codec="aac",
+    threads=4,
+    preset="ultrafast"
+)
